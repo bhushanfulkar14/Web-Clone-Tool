@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe, Code2, Coffee, BarChart2, Brain, Bot, LineChart,
   Cloud, GitBranch, ShieldAlert, X, ArrowRight, CheckCircle2,
-  Loader2, Clock, Users, Zap
+  Loader2, Clock, Users, Zap, Link2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -142,13 +142,17 @@ interface FormData {
   domain: string;
   skills: string;
   message: string;
+  resume: string;
 }
+
+const fieldCls =
+  "bg-[#080d17] border border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-11 text-sm";
 
 export function Internship() {
   const [selectedDomain, setSelectedDomain] = useState<(typeof domains)[0] | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: "", email: "", phone: "", college: "",
-    year: "", domain: "", skills: "", message: "",
+    year: "", domain: "", skills: "", message: "", resume: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -179,7 +183,16 @@ export function Internship() {
       const res = await fetch("/api/internship/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          college: formData.college,
+          year: formData.year,
+          domain: formData.domain,
+          skills: formData.skills,
+          message: formData.message + (formData.resume ? `\n\nResume/Portfolio: ${formData.resume}` : ""),
+        }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -214,9 +227,7 @@ export function Internship() {
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Hands-on internships in 10 high-demand domains. Work on real projects, get mentored by industry experts, and launch your tech career.
           </p>
-
-          {/* Stats strip */}
-          <div className="flex flex-wrap justify-center gap-8 mt-10">
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
             {[
               { icon: Clock, label: "2–3 Months Duration" },
               { icon: Users, label: "Industry Mentors" },
@@ -242,36 +253,25 @@ export function Internship() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06 }}
                 className="group relative bg-[#111827]/70 border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:border-white/20 transition-all duration-300"
-                style={{ boxShadow: `0 0 0 0 ${domain.glow}` }}
                 whileHover={{ y: -6, boxShadow: `0 16px 40px ${domain.glow}` }}
                 onClick={() => openApply(domain)}
               >
-                {/* SVG bg illustration */}
                 <div className="absolute top-0 right-0 w-24 h-24 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
                   <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <path d={domainBgPatterns[domain.img]} className={`fill-current text-white`} />
+                    <path d={domainBgPatterns[domain.img]} className="fill-current text-white" />
                   </svg>
                 </div>
-
-                {/* Gradient top bar */}
                 <div className={`h-1 w-full bg-gradient-to-r ${domain.color}`} />
-
                 <div className="p-5">
-                  {/* Icon */}
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${domain.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-
                   <h3 className="text-white font-bold text-base mb-1 leading-tight">{domain.title}</h3>
                   <p className="text-gray-500 text-xs mb-3 leading-relaxed line-clamp-2">{domain.desc}</p>
-
-                  {/* Duration badge */}
                   <div className="flex items-center gap-1 mb-3">
                     <Clock className="w-3 h-3 text-cyan-400" />
                     <span className="text-cyan-400 text-xs font-medium">{domain.duration}</span>
                   </div>
-
-                  {/* Skills tags */}
                   <div className="flex flex-wrap gap-1 mb-4">
                     {domain.skills.map(skill => (
                       <span key={skill} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-400">
@@ -279,8 +279,6 @@ export function Internship() {
                       </span>
                     ))}
                   </div>
-
-                  {/* Apply button */}
                   <button
                     className={`w-full py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r ${domain.color} opacity-80 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-1.5`}
                     onClick={(e) => { e.stopPropagation(); openApply(domain); }}
@@ -294,7 +292,7 @@ export function Internship() {
         </div>
       </div>
 
-      {/* Apply Modal */}
+      {/* ── Apply Modal ── */}
       <AnimatePresence>
         {selectedDomain && (
           <motion.div
@@ -304,33 +302,34 @@ export function Internship() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={closeModal}
           >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.94, y: 24 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", damping: 25 }}
-              className="relative bg-[#0d1120] border border-white/10 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl"
+              exit={{ opacity: 0, scale: 0.94, y: 24 }}
+              transition={{ type: "spring", damping: 26, stiffness: 300 }}
+              className="relative bg-[#0d1120] border border-white/10 rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal header gradient bar */}
-              <div className={`h-1 w-full bg-gradient-to-r ${selectedDomain.color} rounded-t-2xl`} />
+              {/* Gradient top bar */}
+              <div className={`h-1.5 w-full bg-gradient-to-r ${selectedDomain.color} rounded-t-2xl`} />
 
               <div className="p-6">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-6">
+                {/* Modal header */}
+                <div className="flex items-start justify-between mb-5">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${selectedDomain.color} flex items-center justify-center`}>
+                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${selectedDomain.color} flex items-center justify-center flex-shrink-0`}>
                       <selectedDomain.icon className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <h3 className="text-white font-bold text-lg leading-tight">Apply for Internship</h3>
-                      <p className="text-cyan-400 text-sm">{selectedDomain.title}</p>
+                      <p className={`text-sm font-semibold bg-gradient-to-r ${selectedDomain.color} bg-clip-text text-transparent`}>
+                        {selectedDomain.title}
+                      </p>
                     </div>
                   </div>
-                  <button onClick={closeModal} className="text-gray-500 hover:text-white transition-colors p-1">
+                  <button onClick={closeModal} className="text-gray-500 hover:text-white transition-colors p-1 mt-0.5">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -345,12 +344,15 @@ export function Internship() {
                     <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${selectedDomain.color} flex items-center justify-center mx-auto mb-4`}>
                       <CheckCircle2 className="w-8 h-8 text-white" />
                     </div>
-                    <h4 className="text-white font-bold text-xl mb-2">Application Submitted!</h4>
-                    <p className="text-gray-400 text-sm mb-2">
-                      Thank you for applying to the <strong className="text-white">{selectedDomain.title}</strong> internship.
+                    <h4 className="text-white font-bold text-xl mb-2">Application Submitted! 🎉</h4>
+                    <p className="text-gray-400 text-sm mb-1">
+                      Thank you for applying to <strong className="text-white">{selectedDomain.title}</strong>.
                     </p>
-                    <p className="text-gray-500 text-xs mb-6">
-                      Our team will review your application and reach out at <span className="text-cyan-400">{formData.email}</span> within 2–3 business days.
+                    <p className="text-gray-500 text-xs mb-1">
+                      Confirmation will be sent to <span className="text-cyan-400">{formData.email}</span>
+                    </p>
+                    <p className="text-gray-600 text-xs mb-6">
+                      Our team will review your application and respond within 2–3 business days.
                     </p>
                     <button
                       onClick={closeModal}
@@ -360,91 +362,132 @@ export function Internship() {
                     </button>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="col-span-2">
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Full Name *</Label>
-                        <Input
-                          required
-                          placeholder="Enter your full name"
-                          value={formData.name}
-                          onChange={e => handleChange("name", e.target.value)}
-                          className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-10 text-sm"
-                        />
-                      </div>
+                  <form onSubmit={handleSubmit} className="space-y-3.5">
+
+                    {/* Full Name */}
+                    <div>
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                        Full Name <span className="text-red-400">*</span>
+                      </Label>
+                      <Input
+                        required
+                        placeholder="Enter your full name"
+                        value={formData.name}
+                        onChange={e => handleChange("name", e.target.value)}
+                        className={fieldCls}
+                      />
+                    </div>
+
+                    {/* Email + Phone */}
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Email Address *</Label>
+                        <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                          Email Address <span className="text-red-400">*</span>
+                        </Label>
                         <Input
                           required
                           type="email"
                           placeholder="you@email.com"
                           value={formData.email}
                           onChange={e => handleChange("email", e.target.value)}
-                          className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-10 text-sm"
+                          className={fieldCls}
                         />
                       </div>
                       <div>
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Phone Number *</Label>
+                        <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                          Phone Number <span className="text-red-400">*</span>
+                        </Label>
                         <Input
                           required
                           type="tel"
                           placeholder="+91 XXXXX XXXXX"
                           value={formData.phone}
                           onChange={e => handleChange("phone", e.target.value)}
-                          className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-10 text-sm"
+                          className={fieldCls}
                         />
                       </div>
-                      <div className="col-span-2">
-                        <Label className="text-gray-300 text-xs mb-1.5 block">College / University *</Label>
-                        <Input
-                          required
-                          placeholder="Your institution name"
-                          value={formData.college}
-                          onChange={e => handleChange("college", e.target.value)}
-                          className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-10 text-sm"
-                        />
-                      </div>
+                    </div>
+
+                    {/* College */}
+                    <div>
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                        College / University <span className="text-red-400">*</span>
+                      </Label>
+                      <Input
+                        required
+                        placeholder="Your institution name"
+                        value={formData.college}
+                        onChange={e => handleChange("college", e.target.value)}
+                        className={fieldCls}
+                      />
+                    </div>
+
+                    {/* Year + Domain */}
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Year of Study *</Label>
+                        <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                          Year of Study <span className="text-red-400">*</span>
+                        </Label>
                         <Select onValueChange={v => handleChange("year", v)} required>
-                          <SelectTrigger className="bg-white/5 border-white/10 text-white rounded-xl h-10 text-sm focus:border-white/30">
+                          <SelectTrigger className="bg-[#080d17] border-white/10 text-white rounded-xl h-11 text-sm focus:border-white/30">
                             <SelectValue placeholder="Select year" />
                           </SelectTrigger>
                           <SelectContent className="bg-[#111827] border-white/10 text-white">
-                            {["1st Year", "2nd Year", "3rd Year", "4th Year", "Graduate / Post-Graduate"].map(y => (
+                            {["1st Year", "2nd Year", "3rd Year", "4th Year", "Graduate / Post-Graduate", "Working Professional"].map(y => (
                               <SelectItem key={y} value={y} className="hover:bg-white/5">{y}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Internship Domain</Label>
-                        <Input
-                          readOnly
-                          value={selectedDomain.title}
-                          className="bg-white/5 border-white/10 text-cyan-400 rounded-xl h-10 text-sm cursor-not-allowed"
-                        />
+                        <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">Internship Domain</Label>
+                        <div className={`h-11 rounded-xl border border-white/10 bg-[#080d17] flex items-center px-4`}>
+                          <span className={`text-sm font-semibold bg-gradient-to-r ${selectedDomain.color} bg-clip-text text-transparent`}>
+                            {selectedDomain.title}
+                          </span>
+                        </div>
                       </div>
-                      <div className="col-span-2">
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Your Skills / Tech Stack *</Label>
-                        <Input
-                          required
-                          placeholder="e.g. Python, React, SQL, Git..."
-                          value={formData.skills}
-                          onChange={e => handleChange("skills", e.target.value)}
-                          className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-10 text-sm"
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <Label className="text-gray-300 text-xs mb-1.5 block">Why this internship? (Optional)</Label>
-                        <Textarea
-                          placeholder="Tell us about your goals and why you want this internship..."
-                          value={formData.message}
-                          onChange={e => handleChange("message", e.target.value)}
-                          className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl text-sm resize-none"
-                          rows={3}
-                        />
-                      </div>
+                    </div>
+
+                    {/* Skills */}
+                    <div>
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                        Your Skills / Tech Stack <span className="text-red-400">*</span>
+                      </Label>
+                      <Input
+                        required
+                        placeholder="e.g. Python, React, SQL, Git..."
+                        value={formData.skills}
+                        onChange={e => handleChange("skills", e.target.value)}
+                        className={fieldCls}
+                      />
+                    </div>
+
+                    {/* Resume / Portfolio */}
+                    <div>
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold flex items-center gap-1">
+                        <Link2 className="w-3 h-3" /> Resume / Portfolio Link
+                      </Label>
+                      <Input
+                        placeholder="drive.google.com/... or github.com/..."
+                        value={formData.resume}
+                        onChange={e => handleChange("resume", e.target.value)}
+                        className={fieldCls}
+                      />
+                    </div>
+
+                    {/* Why this internship */}
+                    <div>
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                        Why this internship? <span className="text-gray-500">(Optional)</span>
+                      </Label>
+                      <Textarea
+                        placeholder="Tell us about your goals and why you want this internship..."
+                        value={formData.message}
+                        onChange={e => handleChange("message", e.target.value)}
+                        className="bg-[#080d17] border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl text-sm resize-none"
+                        rows={3}
+                      />
                     </div>
 
                     {error && (
@@ -458,14 +501,12 @@ export function Internship() {
                       disabled={submitting}
                       className={`w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r ${selectedDomain.color} hover:opacity-90 transition-opacity h-11`}
                     >
-                      {submitting ? (
-                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</>
-                      ) : (
-                        <>Submit Application <ArrowRight className="w-4 h-4 ml-2" /></>
-                      )}
+                      {submitting
+                        ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting…</>
+                        : <>Submit Application <ArrowRight className="w-4 h-4 ml-2" /></>}
                     </Button>
 
-                    <p className="text-center text-gray-600 text-xs">
+                    <p className="text-center text-gray-600 text-xs pb-1">
                       Your application will be sent to{" "}
                       <span className="text-gray-400">info@nexgenbrtechnologies.com</span>
                     </p>
