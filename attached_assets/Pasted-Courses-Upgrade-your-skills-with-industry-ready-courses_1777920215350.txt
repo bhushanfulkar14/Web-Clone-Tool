@@ -1,0 +1,94 @@
+Courses
+Upgrade your skills with industry-ready courses.
+Pick a track. Build a portfolio. Get hired. Every course includes live projects, mentor feedback, and a verified certificate.
+
+All Courses
+Development
+Data & Analytics
+AI & Machine Learning
+Core CS
+Design
+Most Popular
+Python Full Stack Development
+Master Python, Django, FastAPI, React, MongoDB. Build deployable real-world apps.
+
+16 weeks
+Beginner → Pro
+Enroll Now
+Industry Ready
+Java Full Stack Development
+Java, Spring Boot, Hibernate, React. Enterprise-grade backend & frontend integration.
+
+16 weeks
+Beginner → Pro
+Enroll Now
+Hands-on
+Frontend (HTML, CSS, React)
+Modern UI with semantic HTML5, Tailwind, React 19, and component design patterns.
+
+10 weeks
+Beginner
+Enroll Now
+API Mastery
+Backend (Node.js)
+Node.js, Express, REST + GraphQL, Auth, MongoDB & PostgreSQL deployments.
+
+10 weeks
+Intermediate
+Enroll Now
+Career Track
+Data Analyst Course
+SQL, Python, statistics, dashboarding, storytelling with data, real datasets.
+
+12 weeks
+All levels
+Enroll Now
+BI Tools
+Power BI
+DAX, Power Query, modeling, professional dashboards & published reports.
+
+6 weeks
+Intermediate
+Enroll Now
+Foundational
+Advanced Excel
+Pivots, formulas, Power Query, automation with VBA & data analysis.
+
+4 weeks
+Beginner
+Enroll Now
+Hot 🔥
+AI & Machine Learning with Python
+Supervised/unsupervised ML, scikit-learn, end-to-end ML lifecycle, deployment.
+
+14 weeks
+Intermediate
+Enroll Now
+Neural Nets
+Deep Learning Basics
+Neural networks, CNNs, RNNs, Transformers fundamentals using PyTorch.
+
+8 weeks
+Intermediate+
+Enroll Now
+Portfolio
+Real-Time ML Projects
+Recommendation engines, computer vision, NLP — ship working ML systems.
+
+Project-based
+Advanced
+Enroll Now
+Interview Prep
+Data Structures & Algorithms (DSA)
+200+ problems, system design intro, FAANG-style interview preparation.
+
+12 weeks
+All levels
+Enroll Now
+Creative
+UI/UX Design (Figma)
+Design thinking, wireframing, prototyping, design systems & Figma mastery.
+
+8 weeks
+Beginner → Pro
+Enroll Now
