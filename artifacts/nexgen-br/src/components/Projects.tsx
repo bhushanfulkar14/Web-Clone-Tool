@@ -159,11 +159,11 @@ const projects = [
   {
     category: "MACHINE LEARNING",
     categoryColor: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-    title: "E-Commerce Demand Forecasting",
-    desc: "Time-series LSTM model predicting product demand across 10K+ SKUs with 91% accuracy, reducing overstock by 38%.",
-    tags: ["Python", "TensorFlow", "LSTM", "Flask", "React"],
+    title: "AutoQ — Automatic Question Paper Generator",
+    desc: "ML-powered system that auto-generates syllabus-aligned question papers from topic inputs, with difficulty control and Bloom's taxonomy tagging.",
+    tags: ["Python", "NLP", "scikit-learn", "Flask", "React"],
     student: "Sneha P.",
-    color: "from-orange-900/60 to-red-900/40",
+    color: "from-orange-900/60 to-amber-900/40",
     accent: "#f97316",
     visual: (
       <svg viewBox="0 0 400 200" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -173,37 +173,75 @@ const projects = [
             <stop offset="0%" stopColor="#431407" />
             <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
-          <linearGradient id="fillOrange" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#f97316" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
-          </linearGradient>
         </defs>
-        {[50, 90, 130, 165].map(y => (
-          <line key={y} x1="40" y1={y} x2="380" y2={y} stroke="#ffffff07" strokeWidth="1" />
+        {/* Header */}
+        <text x="16" y="16" fill="#f97316" fontSize="9" fontFamily="monospace" fontWeight="bold">AutoQ · QUESTION GENERATOR</text>
+        <rect x="290" y="6" width="95" height="14" rx="4" fill="#f9731620" stroke="#f9731640" strokeWidth="1" />
+        <text x="337" y="16" textAnchor="middle" fill="#fdba74" fontSize="7.5" fontFamily="monospace">ML-Powered ✦</text>
+
+        {/* Input panel */}
+        <rect x="16" y="24" width="170" height="80" rx="7" fill="#1c0c00" stroke="#f9731630" strokeWidth="1.5" />
+        <text x="26" y="37" fill="#fb923c" fontSize="7.5" fontFamily="monospace" fontWeight="bold">INPUT</text>
+        <rect x="26" y="42" width="150" height="12" rx="3" fill="#f9731615" />
+        <text x="31" y="51" fill="#94a3b8" fontSize="7" fontFamily="monospace">Topic: Machine Learning</text>
+        <rect x="26" y="58" width="150" height="12" rx="3" fill="#f9731615" />
+        <text x="31" y="67" fill="#94a3b8" fontSize="7" fontFamily="monospace">Difficulty: Medium</text>
+        <rect x="26" y="74" width="150" height="12" rx="3" fill="#f9731615" />
+        <text x="31" y="83" fill="#94a3b8" fontSize="7" fontFamily="monospace">Questions: 10 · Marks: 50</text>
+        <rect x="26" y="90" width="70" height="11" rx="3" fill="#f97316" />
+        <text x="61" y="99" textAnchor="middle" fill="#fff" fontSize="7" fontFamily="monospace" fontWeight="bold">Generate →</text>
+
+        {/* Arrow */}
+        <line x1="192" y1="64" x2="210" y2="64" stroke="#f97316" strokeWidth="2" />
+        <polygon points="210,60 218,64 210,68" fill="#f97316" />
+
+        {/* Output panel */}
+        <rect x="216" y="24" width="168" height="120" rx="7" fill="#1c0c00" stroke="#f9731630" strokeWidth="1.5" />
+        <text x="226" y="37" fill="#fb923c" fontSize="7.5" fontFamily="monospace" fontWeight="bold">GENERATED PAPER</text>
+        {[
+          { q: "Q1. [Remember] Define overfitting.", m: "2M", color: "#86efac" },
+          { q: "Q2. [Apply] Implement k-NN.", m: "5M", color: "#fde68a" },
+          { q: "Q3. [Analyze] Compare SVM vs RF.", m: "8M", color: "#f9a8d4" },
+          { q: "Q4. [Evaluate] Bias-variance tradeoff.", m: "10M", color: "#93c5fd" },
+        ].map((q, i) => (
+          <g key={i}>
+            <rect x="224" y={44 + i * 24} width="152" height="18" rx="3" fill="#f9731610" />
+            <text x="230" y={56 + i * 24} fill="#e2e8f0" fontSize="6.5" fontFamily="monospace">{q.q}</text>
+            <rect x="352" y={46 + i * 24} width="18" height="12" rx="2" fill="#f9731625" />
+            <text x="361" y={55 + i * 24} textAnchor="middle" fill={q.color} fontSize="6" fontFamily="monospace" fontWeight="bold">{q.m}</text>
+          </g>
         ))}
-        {/* Actual line */}
-        <polyline points="40,150 80,130 120,155 160,110 200,90 240,105 280,80 320,95 360,70" fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
-        {/* Prediction line (dashed) */}
-        <polyline points="280,80 320,65 360,50 380,42" fill="none" stroke="#fb923c" strokeWidth="2" strokeDasharray="6 4" strokeLinecap="round" />
-        {/* Fill */}
-        <polygon points="40,165 80,130 120,155 160,110 200,90 240,105 280,80 320,95 360,70 360,165" fill="url(#fillOrange)" />
-        {/* Data points */}
-        {[{x:40,y:150},{x:80,y:130},{x:120,y:155},{x:160,y:110},{x:200,y:90},{x:240,y:105},{x:280,y:80},{x:320,y:95},{x:360,y:70}].map((p,i)=>(
-          <circle key={i} cx={p.x} cy={p.y} r="3.5" fill="#f97316" stroke="#431407" strokeWidth="2" />
+
+        {/* Bloom's taxonomy bar */}
+        <rect x="16" y="115" width="170" height="32" rx="7" fill="#1c0c00" stroke="#f9731630" strokeWidth="1.5" />
+        <text x="26" y="127" fill="#fb923c" fontSize="7" fontFamily="monospace" fontWeight="bold">BLOOM'S TAXONOMY SPREAD</text>
+        {[
+          { label: "Remember", w: 30, color: "#86efac" },
+          { label: "Apply", w: 45, color: "#fde68a" },
+          { label: "Analyze", w: 55, color: "#f9a8d4" },
+          { label: "Evaluate", w: 30, color: "#93c5fd" },
+        ].reduce((acc, b, i) => {
+          const xStart = acc.x;
+          acc.elements.push(
+            <rect key={i} x={xStart} y={131} width={b.w} height={8} rx="2" fill={b.color} opacity="0.8" />
+          );
+          acc.x += b.w + 2;
+          return acc;
+        }, { x: 26, elements: [] as React.ReactNode[] }).elements}
+
+        {/* Stats */}
+        <rect x="16" y="155" width="368" height="34" rx="7" fill="#1c0c00" stroke="#f9731620" strokeWidth="1" />
+        {[
+          { val: "5K+", label: "Papers Gen." },
+          { val: "92%", label: "Accuracy" },
+          { val: "15+", label: "Subjects" },
+          { val: "3s", label: "Avg Time" },
+        ].map((s, i) => (
+          <g key={i}>
+            <text x={48 + i * 90} y="168" textAnchor="middle" fill="#fdba74" fontSize="11" fontFamily="monospace" fontWeight="bold">{s.val}</text>
+            <text x={48 + i * 90} y="181" textAnchor="middle" fill="#64748b" fontSize="7" fontFamily="monospace">{s.label}</text>
+          </g>
         ))}
-        {/* KPI strip */}
-        <rect x="15" y="12" width="75" height="18" rx="4" fill="#f9731620" stroke="#f9731640" strokeWidth="1" />
-        <text x="52" y="24" textAnchor="middle" fill="#fdba74" fontSize="8" fontFamily="monospace" fontWeight="bold">91% accuracy</text>
-        <rect x="100" y="12" width="80" height="18" rx="4" fill="#f9731620" stroke="#f9731640" strokeWidth="1" />
-        <text x="140" y="24" textAnchor="middle" fill="#fdba74" fontSize="8" fontFamily="monospace">↓38% overstock</text>
-        <rect x="190" y="12" width="70" height="18" rx="4" fill="#f9731620" stroke="#f9731640" strokeWidth="1" />
-        <text x="225" y="24" textAnchor="middle" fill="#fdba74" fontSize="8" fontFamily="monospace">10K+ SKUs</text>
-        <text x="340" y="22" fill="#fb923c" fontSize="8" fontFamily="monospace">LSTM</text>
-        {/* Legend */}
-        <line x1="40" y1="188" x2="65" y2="188" stroke="#f97316" strokeWidth="2" />
-        <text x="70" y="191" fill="#f97316" fontSize="7" fontFamily="monospace">Actual</text>
-        <line x1="110" y1="188" x2="135" y2="188" stroke="#fb923c" strokeWidth="2" strokeDasharray="5 3" />
-        <text x="140" y="191" fill="#fb923c" fontSize="7" fontFamily="monospace">Predicted</text>
       </svg>
     ),
   },
