@@ -2,15 +2,20 @@ import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { Shield, Code, Briefcase, GraduationCap } from "lucide-react";
 import { motion } from "framer-motion";
+import type { SectionId } from "@/App";
 
 const technologies = [
   "Python", "FastAPI", "React", "Node.js", "TensorFlow", "Django", "AWS", "Docker", "MongoDB", "PostgreSQL",
   "Python", "FastAPI", "React", "Node.js", "TensorFlow", "Django", "AWS", "Docker", "MongoDB", "PostgreSQL"
 ];
 
-export function Hero() {
+interface HeroProps {
+  onNavigate: (id: SectionId) => void;
+}
+
+export function Hero({ onNavigate }: HeroProps) {
   return (
-    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center pt-24 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Background Marquee */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex flex-col justify-center opacity-5 select-none">
         <div className="flex whitespace-nowrap animate-marquee">
@@ -31,7 +36,7 @@ export function Hero() {
           <Logo size="xl" showText={false} className="mb-8" />
         </motion.div>
 
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -39,8 +44,8 @@ export function Hero() {
         >
           NexGen BR Technologies
         </motion.h2>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -49,7 +54,7 @@ export function Hero() {
           — LEARN · BUILD · INNOVATE —
         </motion.p>
 
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -58,7 +63,7 @@ export function Hero() {
           Learn. <span className="text-gradient">Build.</span> Innovate.
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -67,40 +72,53 @@ export function Hero() {
           Empowering students with cutting-edge skills in AI, Data Science, and Full Stack Development.
         </motion.p>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {[
-            { icon: GraduationCap, text: "Industry-Level Courses" },
-            { icon: Code, text: "Real-Time Projects" },
-            { icon: Briefcase, text: "Internship Programs" },
-            { icon: Shield, text: "Career Guidance" }
+            { icon: GraduationCap, text: "Industry-Level Courses",  id: "courses"    as SectionId },
+            { icon: Code,          text: "Real-Time Projects",       id: "projects"   as SectionId },
+            { icon: Briefcase,     text: "Internship Programs",      id: "internship" as SectionId },
+            { icon: Shield,        text: "Career Guidance",          id: "hire"       as SectionId },
           ].map((pill, i) => (
-            <div key={i} className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm text-gray-300">
+            <button
+              key={i}
+              onClick={() => onNavigate(pill.id)}
+              className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+            >
               <pill.icon className="w-4 h-4 text-cyan-400" />
               {pill.text}
-            </div>
+            </button>
           ))}
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
           className="flex flex-wrap justify-center gap-4 mb-20"
         >
-          <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white rounded-full px-8 text-lg hover-glow">
+          <Button
+            size="lg"
+            onClick={() => onNavigate("internship")}
+            className="bg-gradient-primary hover:opacity-90 text-white rounded-full px-8 text-lg hover-glow"
+          >
             Apply for Internship &rarr;
           </Button>
-          <Button size="lg" variant="outline" className="rounded-full px-8 text-lg border-white/20 hover:bg-white/5 text-white">
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => onNavigate("courses")}
+            className="rounded-full px-8 text-lg border-white/20 hover:bg-white/5 text-white"
+          >
             Explore Courses
           </Button>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
@@ -109,9 +127,9 @@ export function Hero() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-white/10">
             {[
               { label: "STUDENTS TRAINED", value: "1,200+" },
-              { label: "PLACEMENT RATE", value: "85%" },
-              { label: "INDUSTRY MENTORS", value: "40+" },
-              { label: "LIVE PROJECTS", value: "120+" }
+              { label: "PLACEMENT RATE",   value: "85%"    },
+              { label: "INDUSTRY MENTORS", value: "40+"    },
+              { label: "LIVE PROJECTS",    value: "120+"   },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center justify-center p-2">
                 <span className="text-3xl font-bold text-white mb-1">{stat.value}</span>
