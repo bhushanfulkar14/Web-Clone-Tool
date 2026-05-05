@@ -118,22 +118,24 @@ export function Hero({ onNavigate }: HeroProps) {
           </Button>
         </motion.div>
 
+        {/* Stats strip */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
           className="w-full max-w-5xl bg-card/50 backdrop-blur-sm border border-white/10 rounded-2xl p-6"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 divide-x divide-white/10">
             {[
-              { label: "STUDENTS TRAINED", value: "1,200+" },
-              { label: "PLACEMENT RATE",   value: "85%"    },
-              { label: "INDUSTRY MENTORS", value: "40+"    },
-              { label: "LIVE PROJECTS",    value: "120+"   },
+              { label: "STUDENTS TRAINED",     value: "200+"  },
+              { label: "PLACEMENT RATE",        value: "85%"   },
+              { label: "INTERVIEW CRACK RATE",  value: "90%"   },
+              { label: "INDUSTRY MENTORS",      value: "40+"   },
+              { label: "LIVE PROJECTS",         value: "120+"  },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center justify-center p-2">
-                <span className="text-3xl font-bold text-white mb-1">{stat.value}</span>
-                <span className="text-xs text-gray-400 tracking-wider">{stat.label}</span>
+                <span className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</span>
+                <span className="text-[10px] text-gray-400 tracking-wider text-center">{stat.label}</span>
               </div>
             ))}
           </div>

@@ -14,6 +14,8 @@ const trainerSchema = z.object({
   portfolio: z.string().optional(),
   skills: z.string().min(1),
   bio: z.string().min(10),
+  resumeBase64: z.string().optional(),
+  resumeFileName: z.string().optional(),
 });
 
 const studentSchema = z.object({
@@ -26,9 +28,18 @@ const studentSchema = z.object({
   skills: z.string().optional(),
   resume: z.string().optional(),
   message: z.string().optional(),
+  resumeBase64: z.string().optional(),
+  resumeFileName: z.string().optional(),
 });
 
-async function sendHireEmail(type: "trainer" | "student", data: Record<string, unknown>) {
+interface HireEmailOpts {
+  type: "trainer" | "student";
+  data: Record<string, unknown>;
+  resumeBase64?: string;
+  resumeFileName?: string;
+}
+
+async function sendHireEmail({ type, data, resumeBase64, resumeFileName }: HireEmailOpts) {
   const smtpUser = process.env["SMTP_USER"];
   const smtpPass = process.env["SMTP_PASS"];
 
@@ -43,34 +54,83 @@ async function sendHireEmail(type: "trainer" | "student", data: Record<string, u
   });
 
   const isTrainer = type === "trainer";
-  const rows = Object.entries(data)
+  const displayData = { ...data };
+  delete displayData["resumeBase64"];
+  delete displayData["resumeFileName"];
+
+  const rows = Object.entries(displayData)
     .filter(([, v]) => v)
-    .map(([k, v]) => `<tr><td style="padding:8px 0;color:#9ca3af;width:140px;text-transform:capitalize;">${k}</td><td style="padding:8px 0;color:#fff;">${v}</td></tr>`)
+    .map(([k, v]) =>
+      `<tr>
+        <td style="padding:8px 12px;color:#9ca3af;width:150px;text-transform:capitalize;font-size:13px;border-bottom:1px solid #1f2937;">${k.replace(/([A-Z])/g, " $1")}</td>
+        <td style="padding:8px 12px;color:#f3f4f6;font-size:13px;border-bottom:1px solid #1f2937;">${v}</td>
+      </tr>`
+    )
     .join("");
 
+  const accentColor = isTrainer ? "#a78bfa" : "#06b6d4";
+  const label = isTrainer ? "Trainer" : "Student / Fresher";
+
   const html = `
-    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#0a0d1a;color:#fff;padding:32px;border-radius:12px;">
-      <div style="text-align:center;margin-bottom:24px;">
-        <div style="display:inline-block;background:linear-gradient(135deg,#4f6ef7,#7c3aed);border-radius:12px;width:56px;height:56px;line-height:56px;font-size:28px;font-weight:900;color:#fff;margin-bottom:8px;">N</div>
-        <h2 style="color:#fff;margin:0;">NexGen BR Technologies</h2>
-        <p style="color:${isTrainer ? "#a78bfa" : "#06b6d4"};margin:4px 0 0;">New ${isTrainer ? "Trainer" : "Student/Fresher"} Application</p>
+    <div style="font-family:'Segoe UI',sans-serif;max-width:620px;margin:0 auto;background:#0a0d1a;color:#fff;border-radius:16px;overflow:hidden;border:1px solid #1f2937;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#4f6ef7,#7c3aed);padding:28px 32px;text-align:center;">
+        <div style="display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border-radius:14px;width:56px;height:56px;font-size:28px;font-weight:900;color:#fff;margin-bottom:10px;">N</div>
+        <h1 style="margin:0;font-size:22px;font-weight:800;color:#fff;">NexGen BR Technologies</h1>
+        <p style="margin:6px 0 0;color:rgba(255,255,255,0.8);font-size:14px;">New ${label} Application</p>
       </div>
-      <table style="width:100%;border-collapse:collapse;">${rows}</table>
-      <div style="margin-top:24px;padding-top:16px;border-top:1px solid #1f2937;text-align:center;color:#6b7280;font-size:12px;">
-        NexGen BR Technologies &mdash; info@nexgenbrtechnologies.com
+
+      <!-- Body -->
+      <div style="padding:28px 32px;">
+        <div style="background:#111827;border-radius:12px;padding:4px 0;margin-bottom:20px;overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;">
+            ${rows}
+          </table>
+        </div>
+
+        ${resumeBase64 && resumeFileName
+          ? `<div style="background:#1f2937;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+              <span style="font-size:22px;">📎</span>
+              <div>
+                <p style="margin:0;font-size:13px;font-weight:600;color:#f3f4f6;">Resume Attached</p>
+                <p style="margin:4px 0 0;font-size:12px;color:#9ca3af;">${resumeFileName}</p>
+              </div>
+             </div>`
+          : ""}
+
+        <div style="background:linear-gradient(135deg,${accentColor}18,${accentColor}08);border:1px solid ${accentColor}30;border-radius:10px;padding:14px 16px;">
+          <p style="margin:0;font-size:13px;color:${accentColor};font-weight:600;">⚡ Action Required</p>
+          <p style="margin:6px 0 0;font-size:13px;color:#9ca3af;">Review this application and respond to the candidate within 2–3 business days.</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding:20px 32px;border-top:1px solid #1f2937;text-align:center;">
+        <p style="margin:0;font-size:12px;color:#4b5563;">NexGen BR Technologies &mdash; info@nexgenbrtechnologies.com</p>
+        <p style="margin:4px 0 0;font-size:11px;color:#374151;">Wardha, Nagpur, Maharashtra, India</p>
       </div>
     </div>
   `;
 
-  const name = String(data.name ?? "Applicant");
-  const email = String(data.email ?? smtpUser);
+  const name = String(data["name"] ?? "Applicant");
+  const email = String(data["email"] ?? smtpUser);
+
+  const attachments = [];
+  if (resumeBase64 && resumeFileName) {
+    attachments.push({
+      filename: resumeFileName,
+      content: resumeBase64.split(",")[1] ?? resumeBase64,
+      encoding: "base64" as const,
+    });
+  }
 
   await transporter.sendMail({
     from: `"NexGen BR Technologies" <${smtpUser}>`,
     to: "info@nexgenbrtechnologies.com",
     replyTo: email,
-    subject: `New ${isTrainer ? "Trainer" : "Student"} Application — ${name}`,
+    subject: `📋 New ${label} Application — ${name}`,
     html,
+    attachments,
   });
 }
 
@@ -82,7 +142,13 @@ router.post("/hire/trainer", async (req, res) => {
   }
 
   try {
-    await sendHireEmail("trainer", parsed.data as unknown as Record<string, unknown>);
+    const { resumeBase64, resumeFileName, ...rest } = parsed.data;
+    await sendHireEmail({
+      type: "trainer",
+      data: rest as unknown as Record<string, unknown>,
+      resumeBase64,
+      resumeFileName,
+    });
     res.status(201).json({ success: true });
   } catch (err) {
     req.log.error({ err }, "Failed to process trainer application");
@@ -98,7 +164,13 @@ router.post("/hire/student", async (req, res) => {
   }
 
   try {
-    await sendHireEmail("student", parsed.data as unknown as Record<string, unknown>);
+    const { resumeBase64, resumeFileName, ...rest } = parsed.data;
+    await sendHireEmail({
+      type: "student",
+      data: rest as unknown as Record<string, unknown>,
+      resumeBase64,
+      resumeFileName,
+    });
     res.status(201).json({ success: true });
   } catch (err) {
     req.log.error({ err }, "Failed to process student application");

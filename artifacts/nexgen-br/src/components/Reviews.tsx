@@ -82,6 +82,38 @@ const reviews = [
     rating: 5,
     content: "CEH prep + ethical hacking labs — NexGen ke bina yeh possible nahi tha. Real-world security scenarios practice karwate hain yahan.",
   },
+  {
+    name: "Sanika Talwekar",
+    role: "Frontend Developer Intern",
+    initials: "ST",
+    color: "from-cyan-500 to-blue-400",
+    rating: 5,
+    content: "React aur Figma ka combination ek hi jagah sikhna — iske liye NexGen best hai! Projects ekdum real lagte hain. Placement mein bhi help mili.",
+  },
+  {
+    name: "Megha Ingle",
+    role: "Data Science Trainee",
+    initials: "MI",
+    color: "from-purple-400 to-fuchsia-500",
+    rating: 5,
+    content: "NexGen ke mentors ne personally guide kiya — Python se Machine Learning tak ka full journey smooth raha. Girls ke liye bhi bahut supportive environment hai.",
+  },
+  {
+    name: "Pooja Patil",
+    role: "Web Development Intern",
+    initials: "PP",
+    color: "from-rose-400 to-pink-500",
+    rating: 5,
+    content: "Internship ke baad seedha campus drive mein select ho gayi! NexGen ka resume-building session aur mock interviews bahut kaam aye. Highly recommended!",
+  },
+  {
+    name: "Raksha Madpe",
+    role: "AI / ML Intern",
+    initials: "RM",
+    color: "from-green-400 to-teal-500",
+    rating: 5,
+    content: "Deep Learning concepts ko itna clearly explain karte hain yahan. Projects actual industry datasets pe hote hain — yahi farq hai NexGen aur baaki institutes mein.",
+  },
 ];
 
 function Stars({ count }: { count: number }) {
@@ -102,7 +134,7 @@ export function Reviews() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-[320px_1fr] gap-12 items-start">
 
-          {/* Left panel — heading + rating */}
+          {/* Left panel */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -122,14 +154,13 @@ export function Reviews() {
               Real testimonials from real students who turned skills into careers.
             </p>
 
-            {/* Big rating box */}
             <div className="bg-[#111827] border border-white/5 rounded-2xl p-6 inline-block">
               <div className="flex items-baseline gap-2 mb-1">
                 <span className="text-5xl font-black text-white">5.0</span>
                 <span className="text-gray-500 text-sm font-medium">/5.0</span>
               </div>
               <Stars count={5} />
-              <p className="text-gray-500 text-xs mt-2">10 verified student reviews</p>
+              <p className="text-gray-500 text-xs mt-2">14 verified student reviews</p>
             </div>
           </motion.div>
 
@@ -141,14 +172,11 @@ export function Reviews() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.07 }}
+                transition={{ delay: i * 0.05 }}
                 className="group relative bg-[#111827]/80 border border-white/5 rounded-2xl p-5 hover:border-white/15 transition-all duration-300 overflow-hidden"
                 whileHover={{ y: -3 }}
               >
-                {/* Subtle top-right glow */}
                 <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br ${r.color} opacity-10 group-hover:opacity-20 rounded-bl-full transition-opacity`} />
-
-                {/* Quote mark */}
                 <span className="absolute top-4 right-5 text-4xl font-serif text-white/5 leading-none select-none">"</span>
 
                 <div className="flex items-center justify-between mb-3">
