@@ -1,123 +1,28 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe, Code2, Coffee, BarChart2, Brain, Bot, LineChart,
   Cloud, GitBranch, ShieldAlert, X, ArrowRight, CheckCircle2,
-  Loader2, Clock, Users, Zap, Link2
+  Loader2, Clock, Users, Zap, Upload, FileText
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
 const domains = [
-  {
-    icon: Globe,
-    title: "Web Development",
-    color: "from-blue-500 to-cyan-400",
-    glow: "rgba(79,110,247,0.3)",
-    duration: "2–3 Months",
-    skills: ["HTML/CSS", "React", "Node.js", "MongoDB"],
-    desc: "Build modern, responsive web apps used by real users in production environments.",
-    img: "web",
-  },
-  {
-    icon: Code2,
-    title: "Python Development",
-    color: "from-yellow-400 to-green-400",
-    glow: "rgba(250,204,21,0.25)",
-    duration: "2–3 Months",
-    skills: ["Python", "Flask", "FastAPI", "REST APIs"],
-    desc: "Write clean, scalable Python backend services and automate real-world workflows.",
-    img: "python",
-  },
-  {
-    icon: Coffee,
-    title: "Java Development",
-    color: "from-orange-500 to-red-400",
-    glow: "rgba(249,115,22,0.25)",
-    duration: "2–3 Months",
-    skills: ["Java", "Spring Boot", "Hibernate", "SQL"],
-    desc: "Build enterprise-grade Java applications with industry-standard frameworks.",
-    img: "java",
-  },
-  {
-    icon: BarChart2,
-    title: "Data Science",
-    color: "from-purple-500 to-pink-400",
-    glow: "rgba(168,85,247,0.25)",
-    duration: "3 Months",
-    skills: ["Python", "Pandas", "NumPy", "Matplotlib"],
-    desc: "Extract insights from real datasets and drive data-informed decisions.",
-    img: "datasci",
-  },
-  {
-    icon: Bot,
-    title: "Machine Learning",
-    color: "from-indigo-500 to-purple-400",
-    glow: "rgba(99,102,241,0.25)",
-    duration: "3 Months",
-    skills: ["Scikit-learn", "TensorFlow", "Keras", "Python"],
-    desc: "Train, evaluate, and deploy ML models on industry-level datasets.",
-    img: "ml",
-  },
-  {
-    icon: Brain,
-    title: "Artificial Intelligence",
-    color: "from-fuchsia-500 to-violet-500",
-    glow: "rgba(217,70,239,0.25)",
-    duration: "3 Months",
-    skills: ["Deep Learning", "NLP", "Computer Vision", "PyTorch"],
-    desc: "Dive into cutting-edge AI techniques including LLMs, NLP, and computer vision.",
-    img: "ai",
-  },
-  {
-    icon: LineChart,
-    title: "Data Analyst",
-    color: "from-teal-400 to-cyan-500",
-    glow: "rgba(20,184,166,0.25)",
-    duration: "2 Months",
-    skills: ["Excel", "SQL", "Power BI", "Tableau"],
-    desc: "Analyze, visualize, and report on data to inform strategic business decisions.",
-    img: "analyst",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud Computing",
-    color: "from-sky-500 to-blue-400",
-    glow: "rgba(14,165,233,0.25)",
-    duration: "3 Months",
-    skills: ["AWS", "Azure", "GCP", "Docker"],
-    desc: "Deploy, manage, and scale cloud infrastructure across AWS, Azure, and GCP.",
-    img: "cloud",
-  },
-  {
-    icon: GitBranch,
-    title: "DevOps",
-    color: "from-green-400 to-emerald-500",
-    glow: "rgba(52,211,153,0.25)",
-    duration: "3 Months",
-    skills: ["CI/CD", "Kubernetes", "Terraform", "Linux"],
-    desc: "Automate deployment pipelines and manage infra-as-code at scale.",
-    img: "devops",
-  },
-  {
-    icon: ShieldAlert,
-    title: "Cyber Security",
-    color: "from-red-500 to-orange-400",
-    glow: "rgba(239,68,68,0.25)",
-    duration: "3 Months",
-    skills: ["Ethical Hacking", "Network Security", "VAPT", "OWASP"],
-    desc: "Learn to protect systems, networks, and data from modern cyber threats.",
-    img: "cyber",
-  },
+  { icon: Globe,       title: "Web Development",    color: "from-blue-500 to-cyan-400",     glow: "rgba(79,110,247,0.3)",   duration: "2–3 Months", skills: ["HTML/CSS","React","Node.js","MongoDB"],               desc: "Build modern, responsive web apps used by real users in production environments.", img: "web"      },
+  { icon: Code2,       title: "Python Development", color: "from-yellow-400 to-green-400",  glow: "rgba(250,204,21,0.25)",  duration: "2–3 Months", skills: ["Python","Flask","FastAPI","REST APIs"],               desc: "Write clean, scalable Python backend services and automate real-world workflows.", img: "python"   },
+  { icon: Coffee,      title: "Java Development",   color: "from-orange-500 to-red-400",    glow: "rgba(249,115,22,0.25)", duration: "2–3 Months", skills: ["Java","Spring Boot","Hibernate","SQL"],              desc: "Build enterprise-grade Java applications with industry-standard frameworks.",     img: "java"     },
+  { icon: BarChart2,   title: "Data Science",       color: "from-purple-500 to-pink-400",   glow: "rgba(168,85,247,0.25)", duration: "3 Months",   skills: ["Python","Pandas","NumPy","Matplotlib"],              desc: "Extract insights from real datasets and drive data-informed decisions.",           img: "datasci"  },
+  { icon: Bot,         title: "Machine Learning",   color: "from-indigo-500 to-purple-400", glow: "rgba(99,102,241,0.25)", duration: "3 Months",   skills: ["Scikit-learn","TensorFlow","Keras","Python"],         desc: "Train, evaluate, and deploy ML models on industry-level datasets.",               img: "ml"       },
+  { icon: Brain,       title: "Artificial Intelligence", color: "from-fuchsia-500 to-violet-500", glow: "rgba(217,70,239,0.25)", duration: "3 Months", skills: ["Deep Learning","NLP","Computer Vision","PyTorch"], desc: "Dive into cutting-edge AI techniques including LLMs, NLP, and computer vision.", img: "ai"      },
+  { icon: LineChart,   title: "Data Analyst",       color: "from-teal-400 to-cyan-500",     glow: "rgba(20,184,166,0.25)", duration: "2 Months",   skills: ["Excel","SQL","Power BI","Tableau"],                  desc: "Analyze, visualize, and report on data to inform strategic business decisions.",  img: "analyst"  },
+  { icon: Cloud,       title: "Cloud Computing",    color: "from-sky-500 to-blue-400",      glow: "rgba(14,165,233,0.25)", duration: "3 Months",   skills: ["AWS","Azure","GCP","Docker"],                        desc: "Deploy, manage, and scale cloud infrastructure across AWS, Azure, and GCP.",      img: "cloud"    },
+  { icon: GitBranch,   title: "DevOps",             color: "from-green-400 to-emerald-500", glow: "rgba(52,211,153,0.25)", duration: "3 Months",   skills: ["CI/CD","Kubernetes","Terraform","Linux"],             desc: "Automate deployment pipelines and manage infra-as-code at scale.",                img: "devops"   },
+  { icon: ShieldAlert, title: "Cyber Security",     color: "from-red-500 to-orange-400",    glow: "rgba(239,68,68,0.25)",  duration: "3 Months",   skills: ["Ethical Hacking","Network Security","VAPT","OWASP"], desc: "Learn to protect systems, networks, and data from modern cyber threats.",          img: "cyber"    },
 ];
 
 const domainBgPatterns: Record<string, string> = {
@@ -133,65 +38,78 @@ const domainBgPatterns: Record<string, string> = {
   cyber: "M50 5 L85 25 L85 75 L50 95 L15 75 L15 25Z",
 };
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  college: string;
-  year: string;
-  domain: string;
-  skills: string;
-  message: string;
-  resume: string;
-}
+const fieldCls = "bg-[#080d17] border border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-11 text-sm";
 
-const fieldCls =
-  "bg-[#080d17] border border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl h-11 text-sm";
+interface FormState {
+  name: string; email: string; phone: string;
+  college: string; year: string; domain: string;
+  skills: string; message: string; resume: string;
+}
 
 export function Internship() {
   const [selectedDomain, setSelectedDomain] = useState<(typeof domains)[0] | null>(null);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormState>({
     name: "", email: "", phone: "", college: "",
     year: "", domain: "", skills: "", message: "", resume: "",
   });
+
+  // Resume file upload state
+  const [resumeFile, setResumeFile]     = useState<File | null>(null);
+  const [resumeBase64, setResumeBase64] = useState("");
+  const [resumeError, setResumeError]   = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  const [submitted,  setSubmitted]  = useState(false);
+  const [error,      setError]      = useState("");
 
   const openApply = (domain: (typeof domains)[0]) => {
     setSelectedDomain(domain);
     setFormData(prev => ({ ...prev, domain: domain.title }));
-    setSubmitted(false);
-    setError("");
+    setSubmitted(false); setError("");
+    setResumeFile(null); setResumeBase64(""); setResumeError("");
   };
 
   const closeModal = () => {
-    setSelectedDomain(null);
-    setSubmitted(false);
-    setError("");
+    setSelectedDomain(null); setSubmitted(false); setError("");
+    setResumeFile(null); setResumeBase64("");
   };
 
-  const handleChange = (field: keyof FormData, value: string) => {
+  const handleChange = (field: keyof FormState, value: string) =>
     setFormData(prev => ({ ...prev, [field]: value }));
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setResumeError("File size must be under 5 MB"); return; }
+    setResumeError("");
+    setResumeFile(file);
+    const reader = new FileReader();
+    reader.onload = () => setResumeBase64(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
-    setError("");
+    setSubmitting(true); setError("");
     try {
       const res = await fetch("/api/internship/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
+          name:    formData.name,
+          email:   formData.email,
+          phone:   formData.phone,
           college: formData.college,
-          year: formData.year,
-          domain: formData.domain,
-          skills: formData.skills,
-          message: formData.message + (formData.resume ? `\n\nResume/Portfolio: ${formData.resume}` : ""),
+          year:    formData.year,
+          domain:  formData.domain,
+          skills:  formData.skills,
+          message: [
+            formData.message,
+            formData.resume ? `Resume/Portfolio Link: ${formData.resume}` : "",
+          ].filter(Boolean).join("\n\n") || undefined,
+          resumeBase64:   resumeBase64  || undefined,
+          resumeFileName: resumeFile?.name || undefined,
         }),
       });
       if (!res.ok) {
@@ -229,9 +147,9 @@ export function Internship() {
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             {[
-              { icon: Clock, label: "2–3 Months Duration" },
-              { icon: Users, label: "Industry Mentors" },
-              { icon: Zap, label: "Live Project Experience" },
+              { icon: Clock,  label: "2–3 Months Duration"  },
+              { icon: Users,  label: "Industry Mentors"      },
+              { icon: Zap,    label: "Live Project Experience"},
             ].map((s, i) => (
               <div key={i} className="flex items-center gap-2 text-gray-400">
                 <s.icon className="w-4 h-4 text-cyan-400" />
@@ -241,7 +159,7 @@ export function Internship() {
           </div>
         </motion.div>
 
-        {/* Domain Cards Grid */}
+        {/* Domain Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {domains.map((domain, i) => {
             const Icon = domain.icon;
@@ -281,7 +199,7 @@ export function Internship() {
                   </div>
                   <button
                     className={`w-full py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r ${domain.color} opacity-80 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-1.5`}
-                    onClick={(e) => { e.stopPropagation(); openApply(domain); }}
+                    onClick={e => { e.stopPropagation(); openApply(domain); }}
                   >
                     Apply Now <ArrowRight className="w-3.5 h-3.5" />
                   </button>
@@ -310,13 +228,12 @@ export function Internship() {
               exit={{ opacity: 0, scale: 0.94, y: 24 }}
               transition={{ type: "spring", damping: 26, stiffness: 300 }}
               className="relative bg-[#0d1120] border border-white/10 rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             >
-              {/* Gradient top bar */}
               <div className={`h-1.5 w-full bg-gradient-to-r ${selectedDomain.color} rounded-t-2xl`} />
 
               <div className="p-6">
-                {/* Modal header */}
+                {/* Header */}
                 <div className="flex items-start justify-between mb-5">
                   <div className="flex items-center gap-3">
                     <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${selectedDomain.color} flex items-center justify-center flex-shrink-0`}>
@@ -334,13 +251,9 @@ export function Internship() {
                   </button>
                 </div>
 
-                {/* Success state */}
+                {/* Success */}
                 {submitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-10"
-                  >
+                  <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
                     <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${selectedDomain.color} flex items-center justify-center mx-auto mb-4`}>
                       <CheckCircle2 className="w-8 h-8 text-white" />
                     </div>
@@ -349,14 +262,14 @@ export function Internship() {
                       Thank you for applying to <strong className="text-white">{selectedDomain.title}</strong>.
                     </p>
                     <p className="text-gray-500 text-xs mb-1">
-                      Confirmation will be sent to <span className="text-cyan-400">{formData.email}</span>
+                      Confirmation sent to <span className="text-cyan-400">{formData.email}</span>
                     </p>
                     <p className="text-gray-600 text-xs mb-6">
                       Our team will review your application and respond within 2–3 business days.
                     </p>
                     <button
                       onClick={closeModal}
-                      className={`px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r ${selectedDomain.color} hover:opacity-90 transition-opacity`}
+                      className={`px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r ${selectedDomain.color} hover:opacity-90`}
                     >
                       Close
                     </button>
@@ -369,13 +282,8 @@ export function Internship() {
                       <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
                         Full Name <span className="text-red-400">*</span>
                       </Label>
-                      <Input
-                        required
-                        placeholder="Enter your full name"
-                        value={formData.name}
-                        onChange={e => handleChange("name", e.target.value)}
-                        className={fieldCls}
-                      />
+                      <Input required placeholder="Enter your full name" value={formData.name}
+                        onChange={e => handleChange("name", e.target.value)} className={fieldCls} />
                     </div>
 
                     {/* Email + Phone */}
@@ -384,27 +292,15 @@ export function Internship() {
                         <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
                           Email Address <span className="text-red-400">*</span>
                         </Label>
-                        <Input
-                          required
-                          type="email"
-                          placeholder="you@email.com"
-                          value={formData.email}
-                          onChange={e => handleChange("email", e.target.value)}
-                          className={fieldCls}
-                        />
+                        <Input required type="email" placeholder="you@email.com" value={formData.email}
+                          onChange={e => handleChange("email", e.target.value)} className={fieldCls} />
                       </div>
                       <div>
                         <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
                           Phone Number <span className="text-red-400">*</span>
                         </Label>
-                        <Input
-                          required
-                          type="tel"
-                          placeholder="+91 XXXXX XXXXX"
-                          value={formData.phone}
-                          onChange={e => handleChange("phone", e.target.value)}
-                          className={fieldCls}
-                        />
+                        <Input required type="tel" placeholder="+91 XXXXX XXXXX" value={formData.phone}
+                          onChange={e => handleChange("phone", e.target.value)} className={fieldCls} />
                       </div>
                     </div>
 
@@ -413,13 +309,8 @@ export function Internship() {
                       <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
                         College / University <span className="text-red-400">*</span>
                       </Label>
-                      <Input
-                        required
-                        placeholder="Your institution name"
-                        value={formData.college}
-                        onChange={e => handleChange("college", e.target.value)}
-                        className={fieldCls}
-                      />
+                      <Input required placeholder="Your institution name" value={formData.college}
+                        onChange={e => handleChange("college", e.target.value)} className={fieldCls} />
                     </div>
 
                     {/* Year + Domain */}
@@ -433,7 +324,7 @@ export function Internship() {
                             <SelectValue placeholder="Select year" />
                           </SelectTrigger>
                           <SelectContent className="bg-[#111827] border-white/10 text-white">
-                            {["1st Year", "2nd Year", "3rd Year", "4th Year", "Graduate / Post-Graduate", "Working Professional"].map(y => (
+                            {["1st Year","2nd Year","3rd Year","4th Year","Graduate / Post-Graduate","Working Professional"].map(y => (
                               <SelectItem key={y} value={y} className="hover:bg-white/5">{y}</SelectItem>
                             ))}
                           </SelectContent>
@@ -441,7 +332,7 @@ export function Internship() {
                       </div>
                       <div>
                         <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">Internship Domain</Label>
-                        <div className={`h-11 rounded-xl border border-white/10 bg-[#080d17] flex items-center px-4`}>
+                        <div className="h-11 rounded-xl border border-white/10 bg-[#080d17] flex items-center px-4">
                           <span className={`text-sm font-semibold bg-gradient-to-r ${selectedDomain.color} bg-clip-text text-transparent`}>
                             {selectedDomain.title}
                           </span>
@@ -454,57 +345,79 @@ export function Internship() {
                       <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
                         Your Skills / Tech Stack <span className="text-red-400">*</span>
                       </Label>
-                      <Input
-                        required
-                        placeholder="e.g. Python, React, SQL, Git..."
-                        value={formData.skills}
-                        onChange={e => handleChange("skills", e.target.value)}
-                        className={fieldCls}
-                      />
+                      <Input required placeholder="e.g. Python, React, SQL, Git..." value={formData.skills}
+                        onChange={e => handleChange("skills", e.target.value)} className={fieldCls} />
                     </div>
 
-                    {/* Resume / Portfolio */}
+                    {/* Resume File Upload */}
                     <div>
-                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold flex items-center gap-1">
-                        <Link2 className="w-3 h-3" /> Resume / Portfolio Link
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                        Upload Resume <span className="text-gray-500">(PDF / DOC · Max 5 MB)</span>
                       </Label>
-                      <Input
-                        placeholder="drive.google.com/... or github.com/..."
-                        value={formData.resume}
-                        onChange={e => handleChange("resume", e.target.value)}
-                        className={fieldCls}
-                      />
+                      {resumeFile ? (
+                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                          <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                          <span className="text-white text-sm flex-1 truncate">{resumeFile.name}</span>
+                          <span className="text-gray-500 text-xs">{(resumeFile.size / 1024).toFixed(0)} KB</span>
+                          <button
+                            type="button"
+                            onClick={() => { setResumeFile(null); setResumeBase64(""); if (fileRef.current) fileRef.current.value = ""; }}
+                            className="text-gray-500 hover:text-red-400 transition-colors"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => fileRef.current?.click()}
+                          className="w-full flex items-center justify-center gap-2 bg-white/5 border-2 border-dashed border-cyan-500/30 hover:border-cyan-400/60 rounded-xl px-4 py-4 transition-colors cursor-pointer group"
+                        >
+                          <Upload className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                          <span className="text-gray-400 text-sm group-hover:text-white transition-colors">
+                            Click to upload your resume
+                          </span>
+                          <span className="text-gray-600 text-xs">PDF, DOC, DOCX</span>
+                        </button>
+                      )}
+                      {resumeError && <p className="text-red-400 text-xs mt-1">{resumeError}</p>}
+                      <input ref={fileRef} type="file" accept=".pdf,.doc,.docx" onChange={onFileChange} className="hidden" />
                     </div>
 
-                    {/* Why this internship */}
+                    {/* Portfolio link (optional) */}
+                    <div>
+                      <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
+                        GitHub / Portfolio Link <span className="text-gray-500">(Optional)</span>
+                      </Label>
+                      <Input placeholder="github.com/yourprofile or drive.google.com/..." value={formData.resume}
+                        onChange={e => handleChange("resume", e.target.value)} className={fieldCls} />
+                    </div>
+
+                    {/* Message */}
                     <div>
                       <Label className="text-gray-300 text-xs mb-1.5 block font-semibold">
                         Why this internship? <span className="text-gray-500">(Optional)</span>
                       </Label>
-                      <Textarea
-                        placeholder="Tell us about your goals and why you want this internship..."
-                        value={formData.message}
-                        onChange={e => handleChange("message", e.target.value)}
+                      <Textarea placeholder="Tell us about your goals and why you want this internship..."
+                        value={formData.message} onChange={e => handleChange("message", e.target.value)}
                         className="bg-[#080d17] border-white/10 text-white placeholder:text-gray-600 focus:border-white/30 rounded-xl text-sm resize-none"
                         rows={3}
                       />
                     </div>
 
                     {error && (
-                      <p className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-xl px-3 py-2">
-                        {error}
-                      </p>
+                      <p className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-xl px-3 py-2">{error}</p>
                     )}
 
-                    <Button
+                    <button
                       type="submit"
                       disabled={submitting}
-                      className={`w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r ${selectedDomain.color} hover:opacity-90 transition-opacity h-11`}
+                      className={`w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r ${selectedDomain.color} hover:opacity-90 transition-opacity h-11 flex items-center justify-center gap-2`}
                     >
                       {submitting
-                        ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting…</>
-                        : <>Submit Application <ArrowRight className="w-4 h-4 ml-2" /></>}
-                    </Button>
+                        ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting…</>
+                        : <>Submit Application <ArrowRight className="w-4 h-4" /></>}
+                    </button>
 
                     <p className="text-center text-gray-600 text-xs pb-1">
                       Your application will be sent to{" "}

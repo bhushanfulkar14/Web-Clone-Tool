@@ -40,9 +40,9 @@ function App() {
         {active === "home"      && <Hero onNavigate={navigate} />}
         {active === "about"     && <About />}
         {active === "services"  && <Services />}
-        {active === "courses"   && <Courses />}
+        {active === "courses"   && <Courses onNavigate={navigate} />}
         {active === "internship"&& <Internship />}
-        {active === "projects"  && <Projects />}
+        {active === "projects"  && <Projects onNavigate={navigate} />}
         {active === "hire"      && <Hire />}
         {active === "blog"      && <Blog />}
         {active === "reviews"   && <Reviews />}
